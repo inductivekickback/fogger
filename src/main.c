@@ -119,7 +119,6 @@ static int gpio_init(void)
 
 static void oops(void)
 {
-    /* TODO: Put the system into a safe state and then go to system_off? */
     gpio_pin_set(m_err_led_dev, m_err_led_pin, 1);
     k_oops();
 }
