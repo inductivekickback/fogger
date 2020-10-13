@@ -6,16 +6,16 @@ The purpose of this project is to replace the wired remote control that comes wi
 Cheap fog machines usually have a wired remote control with a button and an LED. The LED is used to indicate that the machine is currently at an adequate temperature to produce fog. This project replaces the original remote control with a project box that mimics the old button and LED functionality. Inside the box, a 5V wall wort is used to allow the Thingy:52 to both detect when the fog machine is ready and recharge the Thingy:52's battery. The Thingy:52's battery allows it to continue operating in the periods where the fog machine is reheating. A relay replaces the original remote control's button to put the Thingy:52 in control without exposing it to AC.
 
 The firmware provides two mesh elements:
-1. Element 1
+* Element 1
    1. Config Server
    1. Health Server
    1. Generic OnOff Server
-1. Element 2
+* Element 2
    1. Generic OnOff Server
 
-The Generic OnOff Server in element 1 works like the button on the remote control. Setting this element to 1 will produce fog until it is written back to 0 or the heater becomes active. It is automatically set back to 0 when the heater becomes active. If the fog machine is not able to produce fog then setting it to 1 has no effect.
+The Generic OnOff Server in the first element works like the button on the remote control. Setting this element to 1 will produce fog until it is written back to 0 or the heater becomes active. It is automatically set back to 0 when the heater becomes active. If the fog machine is not able to produce fog then setting it to 1 has no effect.
 
-The Generic OnOff Server in element 2 is set to 1 when the fog machine is capable of producing fog and 0 when the heater is heating. Writing to this element has no effect. A client can read this value to determine whether or not the fog machine will be able to immediately produce fog. Note that the heater can become active at any time.
+The Generic OnOff Server in the second element is set to 1 when the fog machine is capable of producing fog and 0 when the heater is heating. Writing to this element has no effect. A client can read this value to determine whether or not the fog machine will be able to immediately produce fog. Note that the heater can become active at any time.
 
 The firmware for this project is based on the [Bluetooth Mesh Light sample](https://github.com/nrfconnect/sdk-nrf/tree/v1.3-branch/samples/bluetooth/mesh/light) in the [nRF Connect SDK](https://www.nordicsemi.com/Software-and-tools/Software/nRF-Connect-SDK) (NCS). A description of the hardware, including photos and schematics, is available [here](https://inductivekickback.blogspot.com/).
 
