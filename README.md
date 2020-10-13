@@ -15,7 +15,7 @@ The firmware provides two mesh elements:
 
 The Generic OnOff Server in the first element works like the button on the remote control. Setting this element to 1 will produce fog until it is written back to 0 or the heater becomes active. It is automatically set back to 0 when the heater becomes active. If the fog machine is not able to produce fog then setting it to 1 has no effect.
 
-The Generic OnOff Server in the second element is set to 1 when the fog machine is capable of producing fog and 0 when the heater is heating. Writing to this element has no effect. A client can read this value to determine whether or not the fog machine will be able to immediately produce fog. Note that the heater can become active at any time.
+The Generic OnOff Server in the second element is set to 1 when the fog machine is capable of producing fog and 0 when the heater is active. Writing to this element has no practical effect because the written value will be immediately reverted. A client can read this value to determine whether or not the fog machine will be able to immediately produce fog. Note that the heater can become active at any time.
 
 The firmware for this project is based on the [Bluetooth Mesh Light sample](https://github.com/nrfconnect/sdk-nrf/tree/v1.3-branch/samples/bluetooth/mesh/light) in the [nRF Connect SDK](https://www.nordicsemi.com/Software-and-tools/Software/nRF-Connect-SDK) (NCS). A description of the hardware, including photos and schematics, is available [here](https://inductivekickback.blogspot.com/).
 
