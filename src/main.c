@@ -111,7 +111,7 @@ static int gpio_init(void)
         return ret;
     }
 
-	gpio_init_callback(&m_gpio_cb_data, input_changed, BIT(m_button_pin));
+    gpio_init_callback(&m_gpio_cb_data, input_changed, BIT(m_button_pin));
     gpio_add_callback(m_button_dev, &m_gpio_cb_data);
 
     return 0;
@@ -244,10 +244,10 @@ int main(void)
         oops();
     }
 
-	err = bt_enable(bt_ready);
-	if (err) {
+    err = bt_enable(bt_ready);
+    if (err) {
         oops();
-	}
+    }
 
     return 0;
 }
