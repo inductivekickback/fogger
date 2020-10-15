@@ -73,9 +73,11 @@ static void workq_fogger_start(struct k_work *item)
     if (m_machine_ready) {
         if (relay_set(true)) {
             if (NULL != m_status_cb) {
-               m_status_cb(status_get());
+               m_status_cb(FOGGER_STATE_FOGGING);
             }
         }
+    } else {
+        m_status_cb(FOGGER_STATE_HEATING);
     }
 }
 
