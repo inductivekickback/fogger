@@ -36,7 +36,7 @@ int fogger_state_get(enum fogger_state *p_state);
  * @brief Start producing fog, if possible
  *
  * Attempt to start the fog machine. Has no effect if the machine is currently
- * active or is not ready because it is heating.
+ * active or is not ready because it is heating. Uses the system workqueue.
  *
  * @retval -1 module has not been initialized
  */
@@ -46,7 +46,7 @@ int fogger_start(void);
  * @brief Stop producing fog
  *
  * Ensure that the fog machine is not producing fog. Has no effect if the
- * machine is not currently fogging.
+ * machine is not currently fogging. Uses the system workqueue.
  *
  * @retval -1 module has not been initialized
  */

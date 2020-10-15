@@ -12,6 +12,7 @@
 #include "model_handler.h"
 #include "fogger.h"
 
+#define SWITCH_DEBOUNCE_MS  5
 
 enum fogger_elem {
     FOGGER_ELEM_BUTTON,
@@ -32,27 +33,14 @@ static struct device       *m_err_led_dev;
 
 static bool m_button_pressed;
 
+static void debounce_timer_expire(struct k_timer *timer_id);
+
+K_TIMER_DEFINE(m_button_debounce_timer, debounce_timer_expire, NULL);
+
 static void oops(void);
 static void fogger_callback(enum fogger_state status);
 
-/**
- * NOTE: The system workqueue is used to send commands to the fogger module to prevent the button
- *       handler ISR from preempting the BT_RX thread. This also prevents the fogger_status_cb
- *       from being executed in ISR context.
- */
-static struct k_work fogger_start_work;
-static struct k_work fogger_stop_work;
 static struct k_work fogger_status_work;
-
-static void workq_fogger_start(struct k_work *item)
-{
-    fogger_start();
-}
-
-static void workq_fogger_stop(struct k_work *item)
-{
-    fogger_stop();
-}
 
 static void workq_fogger_status(struct k_work *item)
 {
@@ -64,20 +52,24 @@ static void workq_fogger_status(struct k_work *item)
         oops();
         return;
     }
-
     fogger_callback(state);
+}
+
+static void debounce_timer_expire(struct k_timer *timer_id)
+{
+    int val = gpio_pin_get(m_button_dev, m_button_pin);
+    if (val) {
+        m_button_pressed = true;
+        fogger_start();
+    } else {
+        m_button_pressed = false;
+        fogger_stop();
+    }
 }
 
 static void input_changed(struct device *dev, struct gpio_callback *cb, u32_t pins)
 {
-    int val = gpio_pin_get(dev, m_button_pin);
-    if (val) {
-        m_button_pressed = true;
-        k_work_submit(&fogger_start_work);
-    } else {
-        m_button_pressed = false;
-        k_work_submit(&fogger_stop_work);
-    }
+    k_timer_start(&m_button_debounce_timer, K_MSEC(SWITCH_DEBOUNCE_MS), K_MSEC(0));
 }
 
 static int gpio_init(void)
@@ -128,9 +120,9 @@ static void model_handler_callback(uint8_t elem_indx, bool status)
     switch (elem_indx) {
     case FOGGER_ELEM_BUTTON:
         if (status) {
-            k_work_submit(&fogger_start_work);
+            fogger_start();
         } else {
-            k_work_submit(&fogger_stop_work);
+            fogger_stop();
         }
         break;
     case FOGGER_ELEM_READY:
@@ -162,7 +154,7 @@ static void fogger_callback(enum fogger_state status)
         break;
     case FOGGER_STATE_READY:
         if (m_button_pressed) {
-            k_work_submit(&fogger_start_work);
+            fogger_start();
         }
         err = model_handler_elem_update(FOGGER_ELEM_BUTTON, false);
         if (err) {
@@ -228,8 +220,6 @@ int main(void)
 {
 	int err;
 
-    k_work_init(&fogger_start_work, workq_fogger_start);
-    k_work_init(&fogger_stop_work,  workq_fogger_stop);
     k_work_init(&fogger_status_work,workq_fogger_status);
 
     err = gpio_init();
