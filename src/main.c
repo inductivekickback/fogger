@@ -132,6 +132,7 @@ static void model_handler_callback(uint8_t elem_indx, bool status)
         break;
     default:
         oops();
+        break;
     }
 }
 

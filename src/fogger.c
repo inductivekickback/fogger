@@ -16,11 +16,10 @@ static struct device       *m_usb_detect_dev;
 
 static struct gpio_callback m_gpio_cb_data;
 
-static const char * const   m_relay_ctrl_port  = DT_GPIO_LABEL(DT_NODELABEL(led1), gpios);
-static const u8_t           m_relay_ctrl_pin   = DT_GPIO_PIN(DT_NODELABEL(led1),   gpios);
-static const u32_t          m_relay_ctrl_flags = DT_GPIO_FLAGS(DT_NODELABEL(led1), gpios);
+static const char * const   m_relay_ctrl_port  = DT_GPIO_LABEL(DT_NODELABEL(relay_ctrl), gpios);
+static const u8_t           m_relay_ctrl_pin   = DT_GPIO_PIN(DT_NODELABEL(relay_ctrl),   gpios);
+static const u32_t          m_relay_ctrl_flags = DT_GPIO_FLAGS(DT_NODELABEL(relay_ctrl), gpios);
 static struct device       *m_relay_ctrl_dev;
-
 
 static bool             m_initialized = false;
 static bool             m_relay_engaged;
