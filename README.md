@@ -36,11 +36,10 @@ Once the provisioning is complete the app returns to the Network screen.
 
 Complete the following steps in the nRF Mesh app to configure models:
 * On the Network screen, tap the `Mesh Light` node.
-* Basic information about the mesh node and its configuration is displayed:
-
+* Basic information about the mesh node and its configuration is displayed
+* In the Mesh node view, expand the first element:
 <img src="https://user-images.githubusercontent.com/6494431/96958196-9bc3cf00-14b1-11eb-835d-9e62a1cab927.jpg" width="256">
 
-* In the Mesh node view, expand the first element.
 * Tap `Generic OnOff Server` to see the model's configuration.
 * Bind the model to application keys to make it open for communication:
   * Tap `BIND KEY` at the top of the screen.
