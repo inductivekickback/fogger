@@ -17,7 +17,7 @@ The Generic OnOff Server in the first Element works like the button on the remot
 
 The Generic OnOff Server in the second element is set to 1 when the fog machine is capable of producing fog and 0 when the heater is active. Writing to this element has no practical effect because the written value will be immediately reverted. A client can read this value to determine whether or not the fog machine will be able to immediately produce fog. Note that the heater can become active at any time.
 
-The firmware for this project is based on the [Bluetooth Mesh Light sample](https://github.com/nrfconnect/sdk-nrf/tree/v1.3-branch/samples/bluetooth/mesh/light) in the [nRF Connect SDK](https://www.nordicsemi.com/Software-and-tools/Software/nRF-Connect-SDK) (NCS). A description of the hardware -- including photos and schematics -- is available [here](https://inductivekickback.blogspot.com/) and a video of it in action is [here](https://youtu.be/pDFCyO9CB3A).
+The firmware for this project is based on the [Bluetooth Mesh Light sample](https://github.com/nrfconnect/sdk-nrf/tree/v1.3-branch/samples/bluetooth/mesh/light) in the [nRF Connect SDK](https://www.nordicsemi.com/Software-and-tools/Software/nRF-Connect-SDK) (NCS). A detailed description of the project -- including photos and schematics -- is available [here](http://inductivekickback.blogspot.com/2020/10/bluetooth-mesh-fog-machine.html) and a video of it in action is [here](https://youtu.be/pDFCyO9CB3A).
 
 ### Building
 This project is built from the v1.3.0 tag of NCS. The recommended project location is "nrf/samples/bluetooth/mesh/fogger".
