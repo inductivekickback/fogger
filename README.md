@@ -1,6 +1,6 @@
 The purpose of this project is to replace the wired remote control that comes with an inexpensive fog machine with a custom one that is powered by a [Nordic Thingy:52](https://www.nordicsemi.com/Software-and-tools/Prototyping-platforms/Nordic-Thingy-52) so the machine can be controlled via [Bluetooth Mesh](https://www.bluetooth.com/learn-about-bluetooth/bluetooth-technology/mesh/).
 
-<img src="https://user-images.githubusercontent.com/6494431/95821066-1d5f7400-0cde-11eb-9b28-75115d12c02a.jpg" width="512">
+<div style="text-align:center"><img src="https://user-images.githubusercontent.com/6494431/95821066-1d5f7400-0cde-11eb-9b28-75115d12c02a.jpg" width="512"></div>
 
 ### About
 Cheap fog machines usually have a wired remote control with a button and an LED. The LED is used to indicate that the machine is currently at an adequate temperature to produce fog. This project replaces the original remote control with a project box that mimics the old button and LED functionality. Inside the box, a 5V wall wart is used to allow the Thingy:52 to both detect when the fog machine is ready and also recharge the Thingy:52's battery. The Thingy:52's battery keeps it from browning out in the periods where the fog machine is reheating. A relay replaces the original remote control's button to put the Thingy:52 in control without exposing it to AC.
@@ -48,4 +48,4 @@ Complete the following steps in the nRF Mesh app to configure models:
   * Tap `BIND KEY` at the top of the screen.
   * Select `Application Key 1` from the list.
 
-<img src="https://user-images.githubusercontent.com/6494431/96958196-9bc3cf00-14b1-11eb-835d-9e62a1cab927.jpg" width="256">
+<div style="text-align:center"><img src="https://user-images.githubusercontent.com/6494431/96958196-9bc3cf00-14b1-11eb-835d-9e62a1cab927.jpg" width="256"></dev>
