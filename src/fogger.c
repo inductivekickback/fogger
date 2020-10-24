@@ -78,6 +78,11 @@ static void workq_fogger_start(struct k_work *item)
                 m_status_cb(FOGGER_STATE_FOGGING);
             }
         }
+    } else {
+        /* Use the callback to set the state back to zero. */
+        if (NULL != m_status_cb) {
+            m_status_cb(FOGGER_STATE_HEATING);
+        }
     }
 }
 
