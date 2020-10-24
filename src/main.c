@@ -12,7 +12,7 @@
 #include "model_handler.h"
 #include "fogger.h"
 
-#define SWITCH_DEBOUNCE_MS  5
+#define SWITCH_DEBOUNCE_MS  200
 
 enum fogger_elem {
     FOGGER_ELEM_BUTTON,
@@ -35,7 +35,7 @@ static bool m_button_pressed;
 
 static void debounce_timer_expire(struct k_timer *timer_id);
 
-K_TIMER_DEFINE(m_button_debounce_timer, debounce_timer_expire, NULL);
+K_TIMER_DEFINE(main_debounce_timer, debounce_timer_expire, NULL);
 
 static void oops(void);
 static void fogger_callback(enum fogger_state status);
@@ -59,17 +59,21 @@ static void debounce_timer_expire(struct k_timer *timer_id)
 {
     int val = gpio_pin_get(m_button_dev, m_button_pin);
     if (val) {
-        m_button_pressed = true;
-        fogger_start();
+        if (!m_button_pressed) {
+            fogger_start();
+            m_button_pressed = true;
+        }
     } else {
-        m_button_pressed = false;
-        fogger_stop();
+        if (m_button_pressed) {
+            fogger_stop();
+            m_button_pressed = false;
+        }
     }
 }
 
 static void input_changed(struct device *dev, struct gpio_callback *cb, u32_t pins)
 {
-    k_timer_start(&m_button_debounce_timer, K_MSEC(SWITCH_DEBOUNCE_MS), K_MSEC(0));
+    k_timer_start(&main_debounce_timer, K_MSEC(SWITCH_DEBOUNCE_MS), K_MSEC(0));
 }
 
 static int gpio_init(void)

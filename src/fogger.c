@@ -28,7 +28,7 @@ static fogger_status_cb m_status_cb;
 
 static void debounce_timer_expire(struct k_timer *timer_id);
 
-K_TIMER_DEFINE(m_debounce_timer, debounce_timer_expire, NULL);
+K_TIMER_DEFINE(fogger_debounce_timer, debounce_timer_expire, NULL);
 
 static struct k_work m_fogger_status_work;
 static struct k_work m_fogger_start_work;
@@ -101,8 +101,9 @@ static void debounce_timer_expire(struct k_timer *timer_id)
     if (val) {
         if (!m_machine_ready) {
             k_work_submit(&m_fogger_status_work);
+            m_machine_ready = true;
         }
-        m_machine_ready = true;
+
     } else {
         if (m_machine_ready) {
             if (m_relay_engaged) {
@@ -110,14 +111,14 @@ static void debounce_timer_expire(struct k_timer *timer_id)
             } else {
                 k_work_submit(&m_fogger_status_work);
             }
+            m_machine_ready = false;
         }
-        m_machine_ready = false;
     }
 }
 
 static void input_changed(struct device *dev, struct gpio_callback *cb, u32_t pins)
 {
-    k_timer_start(&m_debounce_timer, K_MSEC(SWITCH_DEBOUNCE_MS), K_MSEC(0));
+    k_timer_start(&fogger_debounce_timer, K_MSEC(SWITCH_DEBOUNCE_MS), K_MSEC(0));
 }
 
 static int gpio_init(void)
