@@ -7,7 +7,7 @@
 #include <drivers/gpio.h>
 #include "fogger.h"
 
-#define SWITCH_DEBOUNCE_MS  5
+#define SWITCH_DEBOUNCE_MS  50
 
 static const char * const   m_usb_detect_port  = DT_GPIO_LABEL(DT_NODELABEL(usb_detect), gpios);
 static const u8_t           m_usb_detect_pin   = DT_GPIO_PIN(DT_NODELABEL(usb_detect),   gpios);
@@ -65,7 +65,9 @@ static bool relay_set(bool state)
 
 static void workq_status_cb(struct k_work *item)
 {
-    m_status_cb(status_get());
+    if (NULL != m_status_cb) {
+        m_status_cb(status_get());
+    }
 }
 
 static void workq_fogger_start(struct k_work *item)
@@ -73,11 +75,9 @@ static void workq_fogger_start(struct k_work *item)
     if (m_machine_ready) {
         if (relay_set(true)) {
             if (NULL != m_status_cb) {
-               m_status_cb(FOGGER_STATE_FOGGING);
+                m_status_cb(FOGGER_STATE_FOGGING);
             }
         }
-    } else {
-        m_status_cb(FOGGER_STATE_HEATING);
     }
 }
 
@@ -90,22 +90,23 @@ static void workq_fogger_stop(struct k_work *item)
     }
 }
 
-static void status_notify(void)
-{
-    if (NULL != m_status_cb) {
-        k_work_submit(&m_fogger_status_work);
-    }
-}
-
 static void debounce_timer_expire(struct k_timer *timer_id)
 {
     int val = gpio_pin_get(m_usb_detect_dev, m_usb_detect_pin);
     if (val) {
+        if (!m_machine_ready) {
+            k_work_submit(&m_fogger_status_work);
+        }
         m_machine_ready = true;
-        status_notify();
     } else {
+        if (m_machine_ready) {
+            if (m_relay_engaged) {
+                k_work_submit(&m_fogger_stop_work);
+            } else {
+                k_work_submit(&m_fogger_status_work);
+            }
+        }
         m_machine_ready = false;
-        k_work_submit(&m_fogger_stop_work);
     }
 }
 
