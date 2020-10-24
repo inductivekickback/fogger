@@ -78,7 +78,7 @@ static void input_changed(struct device *dev, struct gpio_callback *cb, u32_t pi
 
 static int gpio_init(void)
 {
-	int ret;
+    int ret;
 
     m_button_dev = device_get_binding(m_button_port);
     if (!m_button_dev) {
@@ -223,7 +223,7 @@ static void bt_ready(int err)
 
 int main(void)
 {
-	int err;
+    int err;
 
     k_work_init(&fogger_status_work,workq_fogger_status);
 
